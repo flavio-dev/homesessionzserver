@@ -6,15 +6,17 @@ const app = express();
 const PORT = Number(process.env.PORT || 4000);
 
 // Answer API requests.
-app.get('/cloudcast/:user/:cloudcastKey/:embedHtml*?', function (req, res) {
+app.get('/cloudcast/:user/:cloudcastKey/:embedJson*?', function (req, res) {
     if (req.headers.origin !== 'http://localhost:3000' && typeof(req.headers.origin) !== 'undefined') {
       res.status(400);
       res.send('None shall pass');
     } else {
         let url = 'https://api.mixcloud.com/' + req.params.user + '/' + req.params.cloudcastKey
-        if (req.params.embedHtml === 'embed-html') {
-            url = url + '/embed-html'
+        console.log('req.params.embedJson = ', req.params.embedJson);
+        if (req.params.embedJson === 'embed-json') {
+            url = url + '/embed-json'
         }
+        console.log('URL at the end = ', url);
         request(encodeURI(url), function (error, response, body) {
             console.log('error:', error); // Print the error if one occurred and handle it
             console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
