@@ -7,7 +7,7 @@ const PORT = Number(process.env.PORT || 4000);
 
 // Answer API requests.
 app.get('/cloudcast/:user/:cloudcastKey/:embedJson*?', function (req, res) {
-    if (req.headers.origin !== 'http://localhost:3000' && typeof(req.headers.origin) !== 'undefined') {
+    if (req.headers.origin !== 'https://localhost:3000' && typeof(req.headers.origin) !== 'undefined') {
       res.status(400);
       res.send('None shall pass');
     } else {
