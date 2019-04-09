@@ -2,9 +2,6 @@
   "name": "server-chatting",
   "version": "1.0.0",
   "description": "How to use create-react-app with a custom Node API on Heroku",
-  "engines": {
-    "node": "10.2.1"
-  },
   "scripts": {
     "start": "node server"
   },
@@ -12,6 +9,7 @@
     "node_modules"
   ],
   "dependencies": {
+    "cheerio": "^1.0.0-rc.3",
     "express": "^4.16.3",
     "request": "^2.87.0"
   },

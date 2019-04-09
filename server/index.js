@@ -1,11 +1,62 @@
 const express = require('express');
 const request = require('request');
+const cheerio = require('cheerio');
 const app = express();
 
 // Priority serve any static files.
 const PORT = Number(process.env.PORT || 4000);
 
 // Answer API requests.
+app.get('/cloudcast/tracklist/:user/:cloudcastKey', function (req, res) {
+    if (req.headers.origin !== 'https://localhost:3000' && typeof(req.headers.origin) !== 'undefined') {
+      res.status(400);
+      res.send('None shall pass');
+    } else {
+        let url = 'https://www.mixcloud.com/' + req.params.user + '/' + req.params.cloudcastKey
+        request(encodeURI(url), function (error, response, body) {
+            console.log('error:', error); // Print the error if one occurred and handle it
+            console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
+            const $ = cheerio.load(body);
+            const datas = $('#relay-data');
+            const dataWeNeed = JSON.parse(datas[0].children[0].data.replace(/&quot;/g,'"'));
+            let featuringArtistList = []
+            let previewUrl = ''
+            for (let data of dataWeNeed) {
+                if(data.hasOwnProperty('cloudcast')){
+                    try {
+                        var featuringArtistListTemp = data.cloudcast.data.cloudcastLookup.featuringArtistList;
+                        var previewUrlTemp = data.cloudcast.data.cloudcastLookup.previewUrl;
+                    } catch ($error){
+
+                    }
+                    if(featuringArtistListTemp){
+                        featuringArtistList = featuringArtistListTemp;
+                    }
+
+                    if(previewUrlTemp){
+                        previewUrl = previewUrlTemp;
+                    }
+
+                    if (featuringArtistList.length && previewUrl.length) {
+                      break;
+                    }
+                }
+            }
+
+            const returnedData = {
+              featuringArtistList,
+              previewUrl
+            }
+
+            res.set('Content-Type', 'application/json');
+            res.set('Access-Control-Allow-Origin', '*');
+            res.set('Access-Control-Allow-Methods', 'GET, OPTIONS');
+            res.set('Access-Control-Allow-Headers', 'Content-Type');
+            res.send(returnedData)
+        });
+    }
+});
+
 app.get('/cloudcast/:user/:cloudcastKey/:embedJson*?', function (req, res) {
     if (req.headers.origin !== 'https://localhost:3000' && typeof(req.headers.origin) !== 'undefined') {
       res.status(400);
