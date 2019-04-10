@@ -21,11 +21,14 @@ app.get('/cloudcast/tracklist/:user/:cloudcastKey', function (req, res) {
             const dataWeNeed = JSON.parse(datas[0].children[0].data.replace(/&quot;/g,'"'));
             let featuringArtistList = []
             let previewUrl = ''
+            let sections = []
             for (let data of dataWeNeed) {
                 if(data.hasOwnProperty('cloudcast')){
                     try {
                         var featuringArtistListTemp = data.cloudcast.data.cloudcastLookup.featuringArtistList;
                         var previewUrlTemp = data.cloudcast.data.cloudcastLookup.previewUrl;
+                        var sectionsTemp = data.cloudcast.data.cloudcastLookup.sections;
+                        console.log('data.cloudcast.data.cloudcastLookup = ', data.cloudcast.data.cloudcastLookup);
                     } catch ($error){
 
                     }
@@ -37,7 +40,11 @@ app.get('/cloudcast/tracklist/:user/:cloudcastKey', function (req, res) {
                         previewUrl = previewUrlTemp;
                     }
 
-                    if (featuringArtistList.length && previewUrl.length) {
+                    if(sectionsTemp){
+                        sections = sectionsTemp;
+                    }
+
+                    if (featuringArtistList.length && previewUrl.length && sections.length) {
                       break;
                     }
                 }
@@ -45,7 +52,8 @@ app.get('/cloudcast/tracklist/:user/:cloudcastKey', function (req, res) {
 
             const returnedData = {
               featuringArtistList,
-              previewUrl
+              previewUrl,
+              sections
             }
 
             res.set('Content-Type', 'application/json');
