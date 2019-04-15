@@ -7,7 +7,7 @@ const app = express();
 const PORT = Number(process.env.PORT || 4000);
 
 // Answer API requests.
-app.get('/cloudcast/tracklist/:user/:cloudcastKey', function (req, res) {
+app.get('/cloudcast/extrainfo/:user/:cloudcastKey', function (req, res) {
     if (req.headers.origin !== 'https://localhost:3000' && typeof(req.headers.origin) !== 'undefined') {
       res.status(400);
       res.send('None shall pass');
@@ -21,13 +21,13 @@ app.get('/cloudcast/tracklist/:user/:cloudcastKey', function (req, res) {
             const dataWeNeed = JSON.parse(datas[0].children[0].data.replace(/&quot;/g,'"'));
             let featuringArtistList = []
             let previewUrl = ''
-            let sections = []
+            // let sections = []
             for (let data of dataWeNeed) {
                 if(data.hasOwnProperty('cloudcast')){
                     try {
                         var featuringArtistListTemp = data.cloudcast.data.cloudcastLookup.featuringArtistList;
                         var previewUrlTemp = data.cloudcast.data.cloudcastLookup.previewUrl;
-                        var sectionsTemp = data.cloudcast.data.cloudcastLookup.sections;
+                        // var sectionsTemp = data.cloudcast.data.cloudcastLookup.sections;
                         console.log('data.cloudcast.data.cloudcastLookup = ', data.cloudcast.data.cloudcastLookup);
                     } catch ($error){
 
@@ -40,11 +40,11 @@ app.get('/cloudcast/tracklist/:user/:cloudcastKey', function (req, res) {
                         previewUrl = previewUrlTemp;
                     }
 
-                    if(sectionsTemp){
-                        sections = sectionsTemp;
-                    }
+                    // if(sectionsTemp){
+                    //     sections = sectionsTemp;
+                    // }
 
-                    if (featuringArtistList.length && previewUrl.length && sections.length) {
+                    if (featuringArtistList.length && previewUrl.length) {
                       break;
                     }
                 }
@@ -52,8 +52,7 @@ app.get('/cloudcast/tracklist/:user/:cloudcastKey', function (req, res) {
 
             const returnedData = {
               featuringArtistList,
-              previewUrl,
-              sections
+              previewUrl
             }
 
             res.set('Content-Type', 'application/json');
