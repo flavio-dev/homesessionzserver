@@ -23,12 +23,12 @@ app.get('/cloudcast/extrainfo/:user/:cloudcastKey', function (req, res) {
             let previewUrl = ''
             // let sections = []
             for (let data of dataWeNeed) {
-                if(data.hasOwnProperty('cloudcast')){
+                if(data.hasOwnProperty('cloudcast')) {
                     try {
                         var featuringArtistListTemp = data.cloudcast.data.cloudcastLookup.featuringArtistList;
                         var previewUrlTemp = data.cloudcast.data.cloudcastLookup.previewUrl;
                         // var sectionsTemp = data.cloudcast.data.cloudcastLookup.sections;
-                        console.log('data.cloudcast.data.cloudcastLookup = ', data.cloudcast.data.cloudcastLookup);
+                        // console.log('data.cloudcast.data.cloudcastLookup = ', data.cloudcast.data.cloudcastLookup);
                     } catch ($error){
 
                     }
