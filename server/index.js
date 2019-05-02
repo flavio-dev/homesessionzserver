@@ -16,38 +16,44 @@ app.get('/cloudcast/extrainfo/:user/:cloudcastKey', function (req, res) {
         request(encodeURI(url), function (error, response, body) {
             console.log('error:', error); // Print the error if one occurred and handle it
             console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
-            const $ = cheerio.load(body);
-            const datas = $('#relay-data');
-            const dataWeNeed = JSON.parse(datas[0].children[0].data.replace(/&quot;/g,'"'));
             let featuringArtistList = []
             let previewUrl = ''
-            // let sections = []
-            for (let data of dataWeNeed) {
+
+            if (!error) {
+              const $ = cheerio.load(body);
+              const datas = $('#relay-data');
+              let dataWeNeed = [];
+              if (datas[0] && datas[0].children[0]) {
+                dataWeNeed = JSON.parse(datas[0].children[0].data.replace(/&quot;/g,'"'));
+              }
+              // let sections = []
+              for (let data of dataWeNeed) {
                 if(data.hasOwnProperty('cloudcast')) {
-                    try {
-                        var featuringArtistListTemp = data.cloudcast.data.cloudcastLookup.featuringArtistList;
-                        var previewUrlTemp = data.cloudcast.data.cloudcastLookup.previewUrl;
-                        // var sectionsTemp = data.cloudcast.data.cloudcastLookup.sections;
-                        // console.log('data.cloudcast.data.cloudcastLookup = ', data.cloudcast.data.cloudcastLookup);
-                    } catch ($error){
+                  try {
+                      var featuringArtistListTemp = data.cloudcast.data.cloudcastLookup.featuringArtistList;
+                      var previewUrlTemp = data.cloudcast.data.cloudcastLookup.previewUrl;
+                      // var sectionsTemp = data.cloudcast.data.cloudcastLookup.sections;
+                      // console.log('data.cloudcast.data.cloudcastLookup = ', data.cloudcast.data.cloudcastLookup);
+                  } catch ($error){
 
-                    }
-                    if(featuringArtistListTemp){
-                        featuringArtistList = featuringArtistListTemp;
-                    }
+                  }
+                  if(featuringArtistListTemp){
+                      featuringArtistList = featuringArtistListTemp;
+                  }
 
-                    if(previewUrlTemp){
-                        previewUrl = previewUrlTemp;
-                    }
+                  if(previewUrlTemp){
+                      previewUrl = previewUrlTemp;
+                  }
 
-                    // if(sectionsTemp){
-                    //     sections = sectionsTemp;
-                    // }
+                  // if(sectionsTemp){
+                  //     sections = sectionsTemp;
+                  // }
 
-                    if (featuringArtistList.length && previewUrl.length) {
-                      break;
-                    }
+                  if (featuringArtistList.length && previewUrl.length) {
+                    break;
+                  }
                 }
+              }
             }
 
             const returnedData = {
