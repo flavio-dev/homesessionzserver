@@ -1,7 +1,7 @@
 {
-  "name": "server-chatting",
+  "name": "homesessionz-server",
   "version": "1.0.0",
-  "description": "How to use create-react-app with a custom Node API on Heroku",
+  "description": "Server in Node for proxy requests to mixcloud",
   "scripts": {
     "start": "node server"
   },
@@ -13,15 +13,9 @@
     "express": "^4.16.3",
     "request": "^2.87.0"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/mars/heroku-cra-node.git"
-  },
   "keywords": [
     "node",
-    "heroku",
-    "create-react-app",
-    "react"
+    "heroku"
   ],
   "license": "MIT",
   "devDependencies": {}
