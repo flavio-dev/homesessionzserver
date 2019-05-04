@@ -9,8 +9,9 @@ const PORT = Number(process.env.PORT || 4000);
 // Answer API requests.
 app.get('/cloudcast/extrainfo/:user/:cloudcastKey', function (req, res) {
     if (
-      req.headers.origin !== 'https://localhost:3000' &&
-      (req.headers.origin !== 'https://www.homesessio.nz' || req.headers.origin !== 'https://homesessio.nz') &&
+      (req.headers.origin !== 'https://localhost:3000' ||
+      req.headers.origin !== 'https://www.homesessio.nz' ||
+      req.headers.origin !== 'https://homesessio.nz') &&
       typeof(req.headers.origin) !== 'undefined'
     ) {
       res.status(400);
@@ -76,8 +77,9 @@ app.get('/cloudcast/extrainfo/:user/:cloudcastKey', function (req, res) {
 
 app.get('/cloudcast/:user/:cloudcastKey/:embedJson*?', function (req, res) {
     if (
-      req.headers.origin !== 'https://localhost:3000' &&
-      (req.headers.origin !== 'https://www.homesessio.nz' || req.headers.origin !== 'https://homesessio.nz') &&
+      (req.headers.origin !== 'https://localhost:3000' ||
+      req.headers.origin !== 'https://www.homesessio.nz' ||
+      req.headers.origin !== 'https://homesessio.nz') &&
       typeof(req.headers.origin) !== 'undefined'
     ) {
       res.status(400);
