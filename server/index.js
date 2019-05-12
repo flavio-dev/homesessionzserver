@@ -83,7 +83,6 @@ app.get('/cloudcast/:user/:cloudcastKey/:embedJson*?', function (req, res) {
       req.headers.origin !== 'https://homesessio.nz') ||
       typeof(req.headers.origin) === 'undefined'
     ) {
-      console.log('ARE WE GOING HERE??????');
       res.status(400);
       res.send('None shall pass');
     } else {
