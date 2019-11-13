@@ -17,7 +17,7 @@ app.get('/cloudcast/extrainfo/:user/:cloudcastKey', function (req, res) {
       res.status(400);
       res.send('None shall pass');
     } else {
-        let url = 'https://www.mixcloud.com/' + req.params.user + '/' + req.params.cloudcastKey
+        let url = 'https://www.mixcloud.com/' + req.params.user + '/' + req.params.cloudcastKey + '/'
         request(encodeURI(url), function (error, response, body) {
             console.log('error:', error); // Print the error if one occurred and handle it
             console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
@@ -28,17 +28,17 @@ app.get('/cloudcast/extrainfo/:user/:cloudcastKey', function (req, res) {
               const $ = cheerio.load(body);
               const datas = $('#relay-data');
               let dataWeNeed = [];
-              if (datas[0] && datas[0].children[0]) {
+              if (datas[0] && datas[0].children[0] && datas[0].children[0].data) {
                 dataWeNeed = JSON.parse(datas[0].children[0].data.replace(/&quot;/g,'"'));
               }
               // let sections = []
               for (let data of dataWeNeed) {
-                if(data.hasOwnProperty('cloudcast')) {
+                if(data.hasOwnProperty('cloudcastLookup')) {
                   try {
-                      var featuringArtistListTemp = data.cloudcast.data.cloudcastLookup.featuringArtistList;
-                      var previewUrlTemp = data.cloudcast.data.cloudcastLookup.previewUrl;
-                      // var sectionsTemp = data.cloudcast.data.cloudcastLookup.sections;
-                      // console.log('data.cloudcast.data.cloudcastLookup = ', data.cloudcast.data.cloudcastLookup);
+                      var featuringArtistListTemp = data.cloudcastLookup.data.cloudcastLookup.featuringArtistList;
+                      var previewUrlTemp = data.cloudcastLookup.data.cloudcastLookup.previewUrl;
+                      // var sectionsTemp = data.cloudcastLookup.data.cloudcastLookup.sections;
+                      // console.log('sectionsTemp = ', sectionsTemp);
                   } catch ($error){
 
                   }
@@ -86,9 +86,9 @@ app.get('/cloudcast/:user/:cloudcastKey/:embedJson*?', function (req, res) {
       res.status(400);
       res.send('None shall pass');
     } else {
-        let url = 'https://api.mixcloud.com/' + req.params.user + '/' + req.params.cloudcastKey
+        let url = 'https://api.mixcloud.com/' + req.params.user + '/' + req.params.cloudcastKey + '/'
         if (req.params.embedJson === 'embed-json') {
-            url = url + '/embed-json?height=60'
+            url = url + 'embed-json/'
         }
         request(encodeURI(url), function (error, response, body) {
             console.log('error:', error); // Print the error if one occurred and handle it
